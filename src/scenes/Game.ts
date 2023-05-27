@@ -91,7 +91,7 @@ export default class Game extends Phaser.Scene {
     gameObjectA.destroy(true);
   }
 
-  update(t: number, dt: number) {
+  update() {
     if (this.ball.y > this.scale.height + 100) {
       --this.lives;
       this.livesLabel.text = `Vidas: ${this.lives}`;
