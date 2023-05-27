@@ -1,11 +1,6 @@
 {
-  "typeRoots": [
-    "./node_modules/@types",
-    "./node_modules/phaser/types"
-  ],
-  "types": [
-      "phaser"
-  ],
+  "typeRoots": ["./node_modules/@types", "./node_modules/phaser/types"],
+  "types": ["phaser"],
   "compilerOptions": {
     "target": "ES2020",
     "useDefineForClassFields": true,
