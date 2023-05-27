@@ -5,9 +5,9 @@ import Paddle from '../game/Paddle';
 export default class Game extends Phaser.Scene {
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private paddle!: Paddle;
-  private ball!: Phaser.Physics.Matter.Image
+  private ball!: Phaser.Physics.Matter.Image;
 
-  private livesLabel!: Phaser.GameObjects.Text
+  private livesLabel!: Phaser.GameObjects.Text;
   private lives = 3;
 
   constructor() {
@@ -47,22 +47,22 @@ export default class Game extends Phaser.Scene {
 
     this.paddle.attachBall(this.ball);
 
-    this.livesLabel = this.add.text(10,10, `Lives: ${this.lives}`, {
-        fontSize: '24px'
+    this.livesLabel = this.add.text(10, 10, `Lives: ${this.lives}`, {
+      fontSize: '24px',
     });
   }
 
   update(t: number, dt: number) {
     if (this.ball.y > this.scale.height + 100) {
-        --this.lives;
-        this.livesLabel.text = `Lives: ${this.lives}`;
-        this.paddle.attachBall(this.ball);
-        return;
+      --this.lives;
+      this.livesLabel.text = `Lives: ${this.lives}`;
+      this.paddle.attachBall(this.ball);
+      return;
     }
 
     const spaceJustDown = Phaser.Input.Keyboard.JustDown(this.cursors.space!);
-    if(spaceJustDown) {
-        this.paddle.launch();
+    if (spaceJustDown) {
+      this.paddle.launch();
     }
 
     this.paddle.update(this.cursors);

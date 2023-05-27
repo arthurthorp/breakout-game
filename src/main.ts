@@ -20,7 +20,7 @@ const config: Phaser.Types.Core.GameConfig = {
         left: true,
         right: true,
         top: true,
-        bottom: false, 
+        bottom: false,
       },
     },
   },

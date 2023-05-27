@@ -24,9 +24,8 @@ export default class Paddle extends Phaser.Physics.Matter.Image {
   }
 
   launch() {
-    if(!this.ball)
-        return;
-    
+    if (!this.ball) return;
+
     const { width, height } = this.scene.scale;
     const x = width * 0.5;
     const y = height * 0.5;
