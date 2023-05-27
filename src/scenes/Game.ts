@@ -10,7 +10,7 @@ export default class Game extends Phaser.Scene {
   private livesLabel!: Phaser.GameObjects.Text;
   private lives = 3;
 
-  private blocks: Phaser.Physics.Matter.Image[] = [];
+  private blocks: Phaser.Physics.Matter.Sprite[] = [];
 
   constructor() {
     super('game');
@@ -25,18 +25,20 @@ export default class Game extends Phaser.Scene {
   create() {
     const { width, height } = this.scale;
 
-    let x = 126;
-    for (let i = 0; i < 5; i++) {
-      const block = this.matter.add
-        .image(x, 200, 'block', undefined, {
-          isStatic: true,
-        })
-        .setData('type', 'block');
+    const map = this.make.tilemap({ key: 'level1' });
+    const tileset = map.addTilesetImage('gray-block', 'block');
 
-      this.blocks.push(block);
+    map.createLayer('Level', tileset);
+    this.blocks = map.createFromTiles(1, 0, { key: 'block' }).map((object) => {
+      object.x += object.width * 0.5;
+      object.y += object.height * 0.5;
 
-      x += block.width;
-    }
+      const block = this.matter.add.gameObject(object, {
+        isStatic: true,
+      }) as Phaser.Physics.Matter.Sprite;
+      block.setData('type', 'block');
+      return block;
+    });
 
     this.ball = this.matter.add.image(400, 300, 'ball', undefined, {
       circleRadius: 12,
@@ -84,7 +86,6 @@ export default class Game extends Phaser.Scene {
 
     if (index !== -1) {
       this.blocks.splice(index, 1);
-      console.dir(this.blocks);
     }
 
     gameObjectA.destroy(true);
