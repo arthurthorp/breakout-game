@@ -10,6 +10,8 @@ export default class Game extends Phaser.Scene {
   private livesLabel!: Phaser.GameObjects.Text;
   private lives = 3;
 
+  private blocks: Phaser.Physics.Matter.Image[] = [];
+
   constructor() {
     super('game');
   }
@@ -22,6 +24,19 @@ export default class Game extends Phaser.Scene {
 
   create() {
     const { width, height } = this.scale;
+
+    let x = 126;
+    for (let i = 0; i < 5; i++) {
+      const block = this.matter.add
+        .image(x, 200, 'block', undefined, {
+          isStatic: true,
+        })
+        .setData('type', 'block');
+
+      this.blocks.push(block);
+
+      x += block.width;
+    }
 
     this.ball = this.matter.add.image(400, 300, 'ball', undefined, {
       circleRadius: 12,
@@ -50,6 +65,29 @@ export default class Game extends Phaser.Scene {
     this.livesLabel = this.add.text(10, 10, `Vidas: ${this.lives}`, {
       fontSize: '24px',
     });
+
+    this.ball.setOnCollide(this.handleBallCollide.bind(this));
+  }
+
+  private handleBallCollide(
+    data: Phaser.Types.Physics.Matter.MatterCollisionData
+  ) {
+    const { bodyA } = data;
+
+    if (!bodyA.gameObject) return;
+
+    const gameObjectA = bodyA.gameObject as Phaser.GameObjects.GameObject;
+
+    if (gameObjectA.getData('type') !== 'block') return;
+
+    const index = this.blocks.findIndex((block) => block === gameObjectA);
+
+    if (index !== -1) {
+      this.blocks.splice(index, 1);
+      console.dir(this.blocks);
+    }
+
+    gameObjectA.destroy(true);
   }
 
   update(t: number, dt: number) {
