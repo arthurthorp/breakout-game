@@ -5,6 +5,10 @@ import Paddle from '../game/Paddle';
 export default class Game extends Phaser.Scene {
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private paddle!: Paddle;
+  private ball!: Phaser.Physics.Matter.Image
+
+  private livesLabel!: Phaser.GameObjects.Text
+  private lives = 3;
 
   constructor() {
     super('game');
@@ -12,19 +16,21 @@ export default class Game extends Phaser.Scene {
 
   init() {
     this.cursors = this.input.keyboard.createCursorKeys();
+
+    this.lives = 3;
   }
 
   create() {
     const { width, height } = this.scale;
 
-    const ball = this.matter.add.image(400, 300, 'ball', undefined, {
+    this.ball = this.matter.add.image(400, 300, 'ball', undefined, {
       circleRadius: 12,
     });
 
-    const body = ball.body as MatterJS.BodyType;
+    const body = this.ball.body as MatterJS.BodyType;
     this.matter.body.setInertia(body, Infinity);
-    ball.setFriction(0, 0);
-    ball.setBounce(1);
+    this.ball.setFriction(0, 0);
+    this.ball.setBounce(1);
 
     this.paddle = new Paddle(
       this.matter.world,
@@ -39,10 +45,26 @@ export default class Game extends Phaser.Scene {
       }
     );
 
-    this.paddle.attachBall(ball);
+    this.paddle.attachBall(this.ball);
+
+    this.livesLabel = this.add.text(10,10, `Lives: ${this.lives}`, {
+        fontSize: '24px'
+    });
   }
 
   update(t: number, dt: number) {
+    if (this.ball.y > this.scale.height + 100) {
+        --this.lives;
+        this.livesLabel.text = `Lives: ${this.lives}`;
+        this.paddle.attachBall(this.ball);
+        return;
+    }
+
+    const spaceJustDown = Phaser.Input.Keyboard.JustDown(this.cursors.space!);
+    if(spaceJustDown) {
+        this.paddle.launch();
+    }
+
     this.paddle.update(this.cursors);
   }
 }

@@ -23,6 +23,24 @@ export default class Paddle extends Phaser.Physics.Matter.Image {
     this.ball.setVelocity(0, 0);
   }
 
+  launch() {
+    if(!this.ball)
+        return;
+    
+    const { width, height } = this.scene.scale;
+    const x = width * 0.5;
+    const y = height * 0.5;
+
+    const vx = x - this.ball.x;
+    const vy = y - this.ball.y;
+
+    const vec = new Phaser.Math.Vector2(vx, vy).normalize().scale(8);
+
+    this.ball.setVelocity(vec.x, vec.y);
+
+    this.ball = undefined;
+  }
+
   update(cursors: Phaser.Types.Input.Keyboard.CursorKeys) {
     const speed = 5;
     if (cursors.left?.isDown) {
