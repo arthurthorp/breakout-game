@@ -10,6 +10,6 @@ export default class Preloader extends Phaser.Scene {
     }
 
     create() {
-       this.add.image(400,300, 'ball');
+       this.scene.start('game');
     }
 }
