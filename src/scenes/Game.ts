@@ -47,7 +47,7 @@ export default class Game extends Phaser.Scene {
 
     this.paddle.attachBall(this.ball);
 
-    this.livesLabel = this.add.text(10, 10, `Lives: ${this.lives}`, {
+    this.livesLabel = this.add.text(10, 10, `Vidas: ${this.lives}`, {
       fontSize: '24px',
     });
   }
@@ -55,12 +55,12 @@ export default class Game extends Phaser.Scene {
   update(t: number, dt: number) {
     if (this.ball.y > this.scale.height + 100) {
       --this.lives;
-      this.livesLabel.text = `Lives: ${this.lives}`;
+      this.livesLabel.text = `Vidas: ${this.lives}`;
       this.paddle.attachBall(this.ball);
       return;
     }
 
-    const spaceJustDown = Phaser.Input.Keyboard.JustDown(this.cursors.space!);
+    const spaceJustDown = Phaser.Input.Keyboard.JustDown(this.cursors.space);
     if (spaceJustDown) {
       this.paddle.launch();
     }
