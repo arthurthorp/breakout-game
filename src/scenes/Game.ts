@@ -88,15 +88,45 @@ export default class Game extends Phaser.Scene {
       this.blocks.splice(index, 1);
     }
 
+    this.sound.play('impact');
     gameObjectA.destroy(true);
+
+    if (this.blocks.length <= 0) {
+      this.sound.play('level-completed');
+      this.scene.start('game-over', { title: 'Você venceu', color: '#0d3451' });
+    }
   }
 
   update() {
     if (this.ball.y > this.scale.height + 100) {
       --this.lives;
       this.livesLabel.text = `Vidas: ${this.lives}`;
+
+      if (this.lives <= 0) {
+        this.sound.play('game-over');
+        this.scene.start('game-over', {
+          title: 'Fim de jogo',
+          color: '#d82727',
+        });
+        return;
+      }
+
       this.paddle.attachBall(this.ball);
       return;
+    }
+
+    const { x, y } = this.ball.body.velocity;
+
+    if (x < 2 && x > 0) {
+      this.ball.setVelocityX(-2.5);
+    } else if (x > -2 && x < 0) {
+      this.ball.setVelocityX(2.5);
+    }
+
+    if (y < 2 && y > 0) {
+      this.ball.setVelocityY(-2.5);
+    } else if (y > -2 && y < 0) {
+      this.ball.setVelocityY(2.5);
     }
 
     const spaceJustDown = Phaser.Input.Keyboard.JustDown(this.cursors.space);

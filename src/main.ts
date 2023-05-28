@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 
 import Preloader from './scenes/Preloader';
 import Game from './scenes/Game';
+import GameOver from './scenes/GameOver';
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -10,11 +11,6 @@ const config: Phaser.Types.Core.GameConfig = {
   physics: {
     default: 'matter',
     matter: {
-      debug: {
-        boundsColor: 0xff0000,
-        lineColor: 0xff0000,
-        staticLineColor: 0xff0000,
-      },
       gravity: { y: 0 },
       setBounds: {
         left: true,
@@ -24,7 +20,7 @@ const config: Phaser.Types.Core.GameConfig = {
       },
     },
   },
-  scene: [Preloader, Game],
+  scene: [Preloader, Game, GameOver],
 };
 
 export default new Phaser.Game(config);

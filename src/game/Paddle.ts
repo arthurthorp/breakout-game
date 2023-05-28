@@ -33,7 +33,7 @@ export default class Paddle extends Phaser.Physics.Matter.Image {
     const vx = x - this.ball.x;
     const vy = y - this.ball.y;
 
-    const vec = new Phaser.Math.Vector2(vx, vy).normalize().scale(8);
+    const vec = new Phaser.Math.Vector2(vx, vy).normalize().scale(4);
 
     this.ball.setVelocity(vec.x, vec.y);
 
